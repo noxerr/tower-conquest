@@ -2,9 +2,6 @@ package noxer.games.ballons.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-
-import noxer.games.ballons.OrthographicCameraExample;
 import noxer.games.ballons.TowerConquest;
 
 public class DesktopLauncher {
@@ -13,6 +10,6 @@ public class DesktopLauncher {
 		config.title = "Tower Conquest";
 	    config.width = 800;
 	    config.height = 480;
-		new LwjglApplication(new OrthographicCameraExample(), config);
+		new LwjglApplication(new TowerConquest(), config);
 	}
 }

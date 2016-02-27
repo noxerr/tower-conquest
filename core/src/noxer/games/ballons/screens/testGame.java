@@ -3,29 +3,18 @@ package noxer.games.ballons.screens;
 import noxer.games.ballons.TowerConquest;
 import noxer.games.ballons.data.Player;
 import noxer.games.ballons.entities.Ball;
-import noxer.games.ballons.entitiesAI.BallBasicAI;
-import noxer.games.ballons.listeners.ContListener;
-import noxer.games.ballons.listeners.GestListener;
-import noxer.games.ballons.listeners.InpListener;
 import noxer.games.ballons.maths.CoordConverter;
 import noxer.games.ballons.subclasses.Controller;
 import noxer.games.ballons.subclasses.ImageUI;
 import noxer.games.ballons.subclasses.IsoMap;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ai.steer.behaviors.Pursue;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,31 +23,30 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class testGame implements Screen {
+public abstract class testGame implements Screen {
 
 	//private boolean firstResize = true;
 	public OrthographicCamera camera;
 	final TowerConquest game;
 	public TiledMap map; 
-	IsoMap renderer;
+	protected IsoMap renderer;
 	public Ball[] balls;
 	public Vector3 touchPos, last_touch_down = new Vector3();
 	public float oldDist = 0;
 	TiledMapTileLayer lay1;
-	World world;
+	protected World world;
 	Box2DDebugRenderer debugRenderer;
-	private NinePatchDrawable loadingBarBackground, loadingBar;
-	private int[][] coords;
+	private float elapsedSinceAnimation = 0;
+	protected int[][] coords;
 	public Player ply;
 	Stage stage;
 	public Controller controller;
 	public boolean touchingPad;
 	public Array<Body> bodiesToDestroy = new Array<Body>(false, 16);
-	private TextureAtlas gameUI, entities;
+	protected TextureAtlas gameUI, entities;
 	private Table container, table;
 	private ScrollPane scrollPane;
 	private Skin skin;
@@ -70,92 +58,18 @@ public class testGame implements Screen {
 		//setting up camera and world
 	    camera = new OrthographicCamera();
 	    camera.setToOrtho(false,w+w,0);
-		map = new TmxMapLoader().load("maps/First.tmx");
-		renderer = new IsoMap(map);
-		touchPos = new Vector3();
-		world = new World(new Vector2(0, 0),true);
-		world.setContactListener(new ContListener(this));
-		gameUI = new TextureAtlas(Gdx.files.internal("skins/gameUI.pack"));
-		entities = new TextureAtlas(Gdx.files.internal("skins/entities.pack"));
-		
-		//setting up Converter Class
-		lay1 = (TiledMapTileLayer) map.getLayers().get(1);
-		float mapW = lay1.getWidth(), mapH = lay1.getHeight(), 
-				tileW = lay1.getTileWidth(), tileH = lay1.getTileHeight();
-		CoordConverter.CoordInit(mapW, mapH, tileW, tileH);
-		
-		setupBalls();
-		coords = new int[2][ply.balls.size];
         debugRenderer = new Box2DDebugRenderer();
-        
-        setupActors();
-        
+
         //AI PART//or evade        
         /*final Flee<Vector2> reachB = new Flee<Vector2>(((BallBasicAI)balls[0].body.getUserData()), 
         		((BallBasicAI)balls[1].body.getUserData()));
         ((BallBasicAI)balls[0].body.getUserData()).setBehavior(reachB);*/
         
-        final Pursue<Vector2> seekSB = new Pursue<Vector2>(((BallBasicAI)balls[1].body.getUserData()), 
-        		((BallBasicAI)balls[0].body.getUserData()));
-        ((BallBasicAI)balls[1].body.getUserData()).setBehavior(seekSB);
-        balls[1].usingAI = true;
-        
-      //setting up processors
-  		InputMultiplexer inp = new InputMultiplexer();
-  		inp.addProcessor(stage);
-  		inp.addProcessor(new InpListener(this));
-  		inp.addProcessor(new GestureDetector(new GestListener(this)));
-  		Gdx.input.setInputProcessor(inp);
 	}
 
 
-	private void setupBalls() {
-		//setting up balls
-        NinePatch loadingBarBackgroundPatch = new NinePatch(gameUI.findRegion("lifeBack"), 2, 2, 2, 2);
-        NinePatch loadingBarPatch = new NinePatch(gameUI.findRegion("lifeRed"), 2, 2, 2, 2);
-        loadingBar = new NinePatchDrawable(loadingBarPatch);
-        loadingBarBackground = new NinePatchDrawable(loadingBarBackgroundPatch);
-        
-        TextureRegion[] regionsRed = new TextureRegion[3];
-        TextureRegion[] regionsBlue = new TextureRegion[3];
-		regionsRed[0] = entities.findRegion("explosionRed1");
-		regionsRed[1] = entities.findRegion("explosionRed2");
-		regionsRed[2] = entities.findRegion("explosionRed3");
-		regionsBlue[0] = entities.findRegion("explosionBlue1");
-		regionsBlue[1] = entities.findRegion("explosionBlue2");
-		regionsBlue[2] = entities.findRegion("explosionBlue3");
-		
-		short casX = 12, casY = 8;
-        balls = new Ball[3];
-		balls[0] = new BallBasicAI(entities.createSprite("ballBasicRed"), lay1, world, loadingBarBackground, loadingBar,
-				regionsRed);
-		CoordConverter.PlacePlayer(casX, casY, balls[0]);
-		casX = 7;
-		casY = 17;
-		balls[1] = new BallBasicAI(entities.createSprite("ballBasicBlue"), lay1, world, loadingBarBackground, loadingBar,
-				regionsBlue);
-		CoordConverter.PlacePlayer(casX, casY, balls[1]);
-		
-		casX = 14;
-		casY = 12;
-		balls[2] = new BallBasicAI(entities.createSprite("ballBasicRed"), lay1, world, loadingBarBackground, loadingBar,
-				regionsRed);
-		CoordConverter.PlacePlayer(casX, casY, balls[2]);
-		
-		//setting up Players
-		//Start player1
-		Ball[] a = new Ball[2];
-		a[0] = balls[0];
-		a[1] = balls[2];
-		ply = new Player(a);
-		initBodys(ply.balls, 5);
-	}
-
-
-	private void setupActors() {
-		//stage = new Stage(new FillViewport(800, 480));
-		stage = new Stage(new ExtendViewport(800, 480));
-		//stage = new Stage();
+	protected void setupActors() {
+		stage = new Stage(new StretchViewport(800, 480));
 		
 		//setting up actors
 		touchingPad = false;
@@ -200,7 +114,7 @@ public class testGame implements Screen {
 	}
 
 
-	private void initBodys(Array<Ball> player1, int level) {
+	protected void initBodys(Array<Ball> player1, int level) {
 		for (int i = 0; i < player1.size; i++){
 	        player1.get(i).initBody(world, 0);
 	        player1.get(i).setGame(this);
@@ -211,7 +125,7 @@ public class testGame implements Screen {
 
 	@Override
 	public void render(float delta) {
-		//delta = Math.min(0.06f, delta);
+		delta = Math.min(0.06f, delta);
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		getRenderingCoords();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -219,17 +133,26 @@ public class testGame implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		world.step(1f/30f, 6, 2);
 		for (Body body : bodiesToDestroy){
-			//world.destroyBody(body);
 			//body.getBody().destroyFixture(body);
 			body.setActive(false);
+			world.destroyBody(body);
 			bodiesToDestroy.removeValue(body, true);
 		}
+		
+		
+		elapsedSinceAnimation += Gdx.graphics.getDeltaTime();
+        if(elapsedSinceAnimation > 0.5f){
+            updateWaterAnimations();
+            elapsedSinceAnimation = 0.0f;
+        }
+		
+		
 		if (touchingPad) ((Ball)balls[2].body.getUserData()).stopMoving = false; //TODO WITH SELECTED BALL
 		//game.batch.enableBlending();
 		camera.update();
 		renderer.setView(camera);
 		//renderer.render();
-		camera.rotate(-0.25f, 0, 0, 1);
+		//camera.rotate(-0.25f, 0, 0, 1);
 		renderer.getBatch().begin();
 			renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(0));
 			renderer.customRender(lay1, coords, ply.balls);
@@ -251,6 +174,8 @@ public class testGame implements Screen {
 			CoordConverter.getCellCoords(ply.balls.get(i).getX()+balls[0].getWidth()/2, ply.balls.get(i).getY(), coords, i);
 		}
 	}
+	
+	abstract void updateWaterAnimations();
 
 
 	public void resize (int width, int height) { 

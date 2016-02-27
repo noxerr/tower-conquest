@@ -23,6 +23,7 @@ public class StageSelector implements Screen {
 	private TextureAtlas atlasStage;
 	private Skin skinStage;
 	private ScrollPane scrollPane;
+	private static int nvl;
 	
 	public StageSelector(MainMenuScreen game) {
 		this.game = game;
@@ -66,10 +67,11 @@ public class StageSelector implements Screen {
 		stages[3] = new ImageButton(skinStage, "field");
 		for (int i = 0; i < stages.length; i++){
 			stages[i].padRight(15);
+			nvl = i;
 			stages[i].addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.game.setScreen(new testGame(game.game));//TODO GO BACK
+				game.game.setScreen(new Nivel(game.game, nvl));//TODO GO BACK
 			}
 			});
 			//stages[i].getColor().mul(1, 1, 1, 0.65f);

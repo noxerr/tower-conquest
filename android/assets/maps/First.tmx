@@ -92,6 +92,21 @@
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="60">
+   <properties>
+    <property name="Tower1" value="1"/>
+   </properties>
+  </tile>
+  <tile id="62">
+   <properties>
+    <property name="Tower1" value="2"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="Tower1" value="3"/>
+   </properties>
+  </tile>
   <tile id="71">
    <properties>
     <property name="blocked" value=""/>
