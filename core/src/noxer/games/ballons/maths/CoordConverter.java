@@ -23,6 +23,7 @@ public class CoordConverter {
 		player.setPosition(x, y);
 	}
 
+	//USED BY BALL TO CHECK IF CELL IS BLOCKED
 	public static Cell getCell(TiledMapTileLayer collisionLayer, float x, float y){
 		Cell cell = collisionLayer.getCell(
 				(int) ((tileW * fixedY - tileW * y - fixedX * tileH + tileH * x) / (tileW * tileH)+ 0.5), 

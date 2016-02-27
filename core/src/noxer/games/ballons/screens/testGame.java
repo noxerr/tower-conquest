@@ -3,6 +3,7 @@ package noxer.games.ballons.screens;
 import noxer.games.ballons.TowerConquest;
 import noxer.games.ballons.data.Player;
 import noxer.games.ballons.entities.Ball;
+import noxer.games.ballons.listeners.ContListener;
 import noxer.games.ballons.maths.CoordConverter;
 import noxer.games.ballons.subclasses.Controller;
 import noxer.games.ballons.subclasses.ImageUI;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -33,15 +35,21 @@ public abstract class testGame implements Screen {
 	final TowerConquest game;
 	public TiledMap map; 
 	protected IsoMap renderer;
+	
 	public Ball[] balls;
+	public Ball[] ownBalls, enemyBalls;
+	
 	public Vector3 touchPos, last_touch_down = new Vector3();
 	public float oldDist = 0;
 	TiledMapTileLayer lay1;
 	protected World world;
+	
 	Box2DDebugRenderer debugRenderer;
 	private float elapsedSinceAnimation = 0;
+	
 	protected int[][] coords;
 	public Player ply;
+	
 	Stage stage;
 	public Controller controller;
 	public boolean touchingPad;
@@ -55,6 +63,9 @@ public abstract class testGame implements Screen {
 		this.game = game;
 		float w = Gdx.graphics.getWidth();
 		
+		touchPos = new Vector3();
+		world = new World(new Vector2(0, 0),true);
+		world.setContactListener(new ContListener(this));
 		//setting up camera and world
 	    camera = new OrthographicCamera();
 	    camera.setToOrtho(false,w+w,0);
@@ -139,9 +150,9 @@ public abstract class testGame implements Screen {
 			bodiesToDestroy.removeValue(body, true);
 		}
 		
-		
+		//ANIMACIONES
 		elapsedSinceAnimation += Gdx.graphics.getDeltaTime();
-        if(elapsedSinceAnimation > 0.5f){
+        if(elapsedSinceAnimation > 0.8f){
             updateWaterAnimations();
             elapsedSinceAnimation = 0.0f;
         }
@@ -169,6 +180,7 @@ public abstract class testGame implements Screen {
 		stage.act(delta);
 	}
 	
+	//ACTUALIZA LAS COORDENADAS PARA SABER DONDE PINTAR
 	private void getRenderingCoords() {
 		for (int i = 0; i < ply.balls.size; i++){
 			CoordConverter.getCellCoords(ply.balls.get(i).getX()+balls[0].getWidth()/2, ply.balls.get(i).getY(), coords, i);
