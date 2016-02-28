@@ -22,6 +22,7 @@ import noxer.games.ballons.data.OpcionesPartida;
 import noxer.games.ballons.data.Player;
 import noxer.games.ballons.entities.Ball;
 import noxer.games.ballons.entitiesAI.BallBasicAI;
+import noxer.games.ballons.entitiesAI.Tower;
 import noxer.games.ballons.listeners.GestListener;
 import noxer.games.ballons.listeners.InpListener;
 import noxer.games.ballons.maths.CoordConverter;
@@ -29,7 +30,7 @@ import noxer.games.ballons.subclasses.IsoMap;
 
 public class Nivel extends testGame{
 
-	private NinePatchDrawable loadingBarBackground, loadingBar;
+	private NinePatchDrawable loadingBarBackground, loadingBar, ldBackBlue, ldBarBlue;
 	ArrayList<TiledMapTileLayer.Cell> towerCellsInScene;
     Map<String,TiledMapTile> towerTiles;
     private OpcionesPartida ops;
@@ -123,8 +124,12 @@ public class Nivel extends testGame{
 		//setting up balls
         NinePatch loadingBarBackgroundPatch = new NinePatch(gameUI.findRegion("lifeBack"), 2, 2, 2, 2);
         NinePatch loadingBarPatch = new NinePatch(gameUI.findRegion("lifeRed"), 2, 2, 2, 2);
+        NinePatch ldBack = new NinePatch(gameUI.findRegion("lifeBlue"), 2, 2, 2, 2);
+        NinePatch ldBar = new NinePatch(gameUI.findRegion("lifeBlue"), 2, 2, 2, 2);
         loadingBar = new NinePatchDrawable(loadingBarPatch);
         loadingBarBackground = new NinePatchDrawable(loadingBarBackgroundPatch);
+        ldBarBlue = new NinePatchDrawable(ldBar);
+        ldBackBlue = new NinePatchDrawable(ldBack);
         
         TextureRegion[] regionsRed = new TextureRegion[3];
         TextureRegion[] regionsBlue = new TextureRegion[3];
@@ -173,17 +178,31 @@ public class Nivel extends testGame{
 			enemyBalls[i].setGame(this);
 		}
 		
-
-		/*balls = new Ball[2];
-		short casX = 22;
-		short casY = 32;
-		balls[1] = new BallBasicAI(entities.createSprite("ballBasicBlue"), lay1, world, loadingBarBackground, loadingBar,
-				regionsBlue);
-		CoordConverter.PlacePlayer(casX, casY, balls[1]);
-		balls[1].initBody(world, 1);*/
-		
 		ply = new Player(ownBalls);
 		cpu = new Player(enemyBalls);
+		
+		updateOps();
+		
+		Tower mia = new Tower(loadingBarBackground, loadingBar, ops.xTorreMia, ops.yTorreMia, 64, ops.hTorreMia);
+		Tower enemigo = new Tower(ldBackBlue, ldBarBlue, ops.xTorreEn, ops.yTorreEn, 64, ops.hTorreEn);
+		ply.addTower(mia);
+		cpu.addTower(enemigo);
+		mia.initBody(world, 0);
+		enemigo.initBody(world, 1);
+	}
+
+
+	private void updateOps() {
+		float xAux, yAux;
+		xAux = CoordConverter.getCellX(ops.xTorreMia, ops.yTorreMia);
+		yAux = CoordConverter.getCellY(ops.xTorreMia, ops.yTorreMia);
+		ops.xTorreMia = xAux;
+		ops.yTorreMia = yAux;
+		
+		xAux = CoordConverter.getCellX(ops.xTorreEn, ops.yTorreEn);
+		yAux = CoordConverter.getCellY(ops.xTorreEn, ops.yTorreEn);
+		ops.xTorreEn = xAux;
+		ops.yTorreEn = yAux;
 	}
 
 

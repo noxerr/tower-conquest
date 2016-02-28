@@ -168,13 +168,17 @@ public abstract class testGame implements Screen {
 			renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(0));
 			renderer.customRender(lay1, coords, ply.balls, coordsCPU, cpu.balls);
 			renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(2));
+			ply.tower.patchHP.draw(renderer.getBatch(), ply.tower.posX - ply.tower.width/2, 
+					ply.tower.posY + ply.tower.height*4/5, ply.tower.width, 16);
+			cpu.tower.patchHP.draw(renderer.getBatch(), cpu.tower.posX - cpu.tower.width/2, 
+					cpu.tower.posY + cpu.tower.height*4/5, cpu.tower.width, 16);
 			//balls[1].draw(renderer.getBatch());
 			//player.setColor(0, 0, 1, 1);			
 			renderer.getBatch().setProjectionMatrix(camera.projection);
 			game.font.draw(renderer.getBatch(), "fps: " + Gdx.graphics.getFramesPerSecond(), 280 *camera.zoom, 260*camera.zoom);
 		renderer.getBatch().end();
 		debugRenderer.render(world, camera.combined);
-		container.debugTable();
+		//container.debugTable();
 		stage.getViewport().apply();
 		stage.draw();
 		stage.act(delta);

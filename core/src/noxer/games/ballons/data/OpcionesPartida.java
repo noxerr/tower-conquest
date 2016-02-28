@@ -6,7 +6,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class OpcionesPartida {
 
-	public int numBolasMias, numBolasEnemigo, numEnemigos, xTorreMia, yTorreMia, xTorreEn, yTorreEn;
+	public int numBolasMias, numBolasEnemigo, numEnemigos, hTorreMia, hTorreEn;
+	public float xTorreMia, yTorreMia, xTorreEn, yTorreEn;
 	public TiledMap map;
 	public int posicionesMias [][], posicionesEnemigas[][];
 	public int unidadesMias[]; //0 ballbasic, 1 ballDefender, 2 ballStrong
@@ -36,6 +37,13 @@ public class OpcionesPartida {
 			posicionesEnemigas[1][2] = 32;
 			unidadesMias = new int [] {0,1,2};
 			unidadesEnemigo = new int [] {0,1,0};
+			
+			xTorreMia = 29;
+			yTorreMia = 42;
+			xTorreEn = 42;
+			yTorreEn = 30;
+			hTorreMia = 64;
+			hTorreEn = 32;
 			break;
 		case 1:
 			map = new TmxMapLoader().load("maps/First.tmx");
@@ -60,6 +68,13 @@ public class OpcionesPartida {
 			posicionesEnemigas[1][2] = 32;
 			unidadesMias = new int [] {0,1,2};
 			unidadesEnemigo = new int [] {0,1,2};
+			
+			xTorreMia = 29;
+			yTorreMia = 42;
+			xTorreEn = 42;
+			yTorreEn = 30;
+			hTorreMia = 64;
+			hTorreEn = 32;
 			break;
 		default:
 			map = new TmxMapLoader().load("maps/First.tmx");
@@ -84,6 +99,13 @@ public class OpcionesPartida {
 			posicionesEnemigas[1][2] = 32;
 			unidadesMias = new int [] {0,1,2};
 			unidadesEnemigo = new int [] {0,1,2};
+			
+			xTorreMia = 29;
+			yTorreMia = 42;
+			xTorreEn = 42;
+			yTorreEn = 30;
+			hTorreMia = 64;
+			hTorreEn = 32;
 			break;
 		}
 	}

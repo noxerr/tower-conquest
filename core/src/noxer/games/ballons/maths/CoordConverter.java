@@ -31,8 +31,23 @@ public class CoordConverter {
 		return cell;
 	}
 	
+	//en realidad guarda la celda y le pasas tu las coordenadas
 	public static void getCellCoords(float x, float y, int[][] coords, int i){
 		coords[0][i] = (int) ((tileW * fixedY - tileW * y - fixedX * tileH + tileH * x) / (tileW * tileH)+ 0.5);
 		coords[1][i] = (int) (mapH - ((tileW * fixedY - tileW * y + fixedX * tileH - tileH * x) / (tileW * tileH)-0.5));
 	}
+	
+	public static float getCellX(float x, float y){
+		return fixedX + ((x - y) * tileW / 2);
+	}
+	
+	public static float getCellY(float x, float y){
+		return fixedY - ((x + y) * tileH / 2);
+	}
 }
+
+
+
+
+
+

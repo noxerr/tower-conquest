@@ -1,12 +1,15 @@
 package noxer.games.ballons.data;
 
 import noxer.games.ballons.entities.Ball;
+import noxer.games.ballons.entitiesAI.Tower;
+
 import com.badlogic.gdx.utils.Array;
 
 public class Player {
 	public Array<Ball> balls;//or arraylist
 	public Array<Ball> ballsAlive; 
 	public int padStyle;
+	public Tower tower;
 	
 	public Player(Ball balls[]){
 		this.balls = new Array<Ball>(balls);
@@ -31,5 +34,9 @@ public class Player {
 	
 	public Ball[] getBalls(){
 		return balls.items;
+	}
+	
+	public void addTower(Tower tower){
+		this.tower = tower;
 	}
 }
