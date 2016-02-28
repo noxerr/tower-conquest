@@ -1,8 +1,5 @@
 package noxer.games.ballons.entitiesAI;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -10,13 +7,17 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
-public class Tower extends Sprite {
+public class Tower{
 	
 	private Body body;
+	private int posX, posY, width, height;
 	
-	public Tower(Sprite sprite, NinePatchDrawable patchBack, NinePatchDrawable patchHP,
-			TextureRegion[] explosion){
-		super(sprite);
+	public Tower(NinePatchDrawable patchBack, NinePatchDrawable patchHP, int posX, int posY,
+			int width, int height){
+		this.posX = posX;
+		this.posY = posY;
+		this.width = width;
+		this.height = height;
 	}
 	
 	
@@ -24,12 +25,12 @@ public class Tower extends Sprite {
 		BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.fixedRotation = true;
-        bodyDef.position.set(getX() + getWidth()/2, getY() + getHeight()/2);
+        bodyDef.position.set(posX + width/2, posY + height/2);
         body = world.createBody(bodyDef);
         body.setUserData(this);
-        
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(getWidth()/2, getHeight()/2);
+        shape.setAsBox(width/2, height/2);
+        body.setTransform(body.getPosition(), (float) (Math.PI/2));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -40,10 +41,10 @@ public class Tower extends Sprite {
         shape.dispose();
 	}
 
-	@Override
+	/*@Override
     public void draw(Batch batch) {
 		super.draw(batch);
-    }
+    }*/
 }
 
 

@@ -137,7 +137,7 @@ public class IsoMap extends BatchTiledMapRenderer {
 	}
 
 
-	public void customRender (TiledMapTileLayer layer, int[][] coords, Array<Ball> player) {
+	public void customRender (TiledMapTileLayer layer, int[][] coords, Array<Ball> player, int[][] coordsCPU, Array<Ball> cpu) {
 		final Color batchColor = batch.getColor();
 		final float color = Color.toFloatBits(batchColor.r, batchColor.g, batchColor.b, batchColor.a * layer.getOpacity());
 
@@ -174,6 +174,11 @@ public class IsoMap extends BatchTiledMapRenderer {
 						if (coords[0][i] == col)
 							if (coords[1][i] == row)
 								player.get(i).draw(batch);
+					}
+					for (int i = 0; i < cpu.size; i++) {
+						if (coordsCPU[0][i] == col)
+							if (coordsCPU[1][i] == row)
+								cpu.get(i).draw(batch);
 					}
 					continue;
 				}
@@ -222,6 +227,11 @@ public class IsoMap extends BatchTiledMapRenderer {
 					if (coords[0][i] == col)
 						if (coords[1][i] == row)
 							player.get(i).draw(batch);
+				}
+				for (int i = 0; i < cpu.size; i++) {
+					if (coordsCPU[0][i] == col)
+						if (coordsCPU[1][i] == row)
+							cpu.get(i).draw(batch);
 				}
 			}
 		}

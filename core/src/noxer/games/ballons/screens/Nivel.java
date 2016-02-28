@@ -52,13 +52,14 @@ public class Nivel extends testGame{
 		//INIT BALLS
 		setupBalls();
 		coords = new int[2][ply.balls.size];
+		coordsCPU = new int[2][cpu.balls.size];
 		
 		super.setupActors();
 		
-		final Pursue<Vector2> seekSB = new Pursue<Vector2>(((BallBasicAI)balls[1]), 
+		final Pursue<Vector2> seekSB = new Pursue<Vector2>(((BallBasicAI)enemyBalls[0]), 
         		((BallBasicAI)ownBalls[0]));
-        ((BallBasicAI)balls[1].body.getUserData()).setBehavior(seekSB);
-        balls[1].usingAI = true;
+        ((BallBasicAI)enemyBalls[0].body.getUserData()).setBehavior(seekSB);
+        enemyBalls[0].usingAI = true;
         
         
       //setting up processors
@@ -155,32 +156,34 @@ public class Nivel extends testGame{
 		}
 		
 		
-		/*short casX = 12, casY = 8;
-        balls = new Ball[3];
-		balls[0] = new BallBasicAI(entities.createSprite("ballBasicRed"), lay1, world, loadingBarBackground, loadingBar,
-				regionsRed);
-		CoordConverter.PlacePlayer(casX, casY, balls[0]);*/
-		balls = new Ball[2];
+		for (int i = 0; i < enemyBalls.length; i++){
+			switch (ops.unidadesEnemigo[i]) { //segun el tipo de unidad k sea la 0, creamos 1 tipo o otro, y asi
+			case 0:
+				enemyBalls[i] = new BallBasicAI(entities.createSprite("ballBasicBlue"), 
+						lay1, world, loadingBarBackground, loadingBar, regionsBlue);
+				break;
+				//PONER OTROS CASOS
+			default:
+				enemyBalls[i] = new BallBasicAI(entities.createSprite("ballBasicBlue"), 
+						lay1, world, loadingBarBackground, loadingBar, regionsBlue);
+				break;
+			}
+			CoordConverter.PlacePlayer(ops.posicionesEnemigas[0][i], ops.posicionesEnemigas[1][i], enemyBalls[i]);
+			enemyBalls[i].initBody(world, 1);
+			enemyBalls[i].setGame(this);
+		}
+		
+
+		/*balls = new Ball[2];
 		short casX = 22;
 		short casY = 32;
 		balls[1] = new BallBasicAI(entities.createSprite("ballBasicBlue"), lay1, world, loadingBarBackground, loadingBar,
 				regionsBlue);
 		CoordConverter.PlacePlayer(casX, casY, balls[1]);
-		balls[1].initBody(world, 1);
+		balls[1].initBody(world, 1);*/
 		
-		/*casX = 14;
-		casY = 12;
-		balls[2] = new BallBasicAI(entities.createSprite("ballBasicRed"), lay1, world, loadingBarBackground, loadingBar,
-				regionsRed);
-		CoordConverter.PlacePlayer(casX, casY, balls[2]);*/
-		
-		//setting up Players
-		//Start player1
-		/*Ball[] a = new Ball[2];
-		a[0] = balls[0];
-		a[1] = balls[2];*/
 		ply = new Player(ownBalls);
-		//initBodys(ply.balls, 5);
+		cpu = new Player(enemyBalls);
 	}
 
 

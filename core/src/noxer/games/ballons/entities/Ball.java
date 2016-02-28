@@ -3,7 +3,6 @@ package noxer.games.ballons.entities;
 
 import noxer.games.ballons.maths.CoordConverter;
 import noxer.games.ballons.screens.Nivel;
-import noxer.games.ballons.screens.testGame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;

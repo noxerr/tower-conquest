@@ -31,7 +31,7 @@ public class OpcionesPartida {
 			posicionesEnemigas[0][1] = 41;
 			posicionesEnemigas[0][2] = 41;
 			
-			posicionesEnemigas[1][0] = 30;
+			posicionesEnemigas[1][0] = 33;
 			posicionesEnemigas[1][1] = 31;
 			posicionesEnemigas[1][2] = 32;
 			unidadesMias = new int [] {0,1,2};
@@ -55,7 +55,7 @@ public class OpcionesPartida {
 			posicionesEnemigas[0][1] = 41;
 			posicionesEnemigas[0][2] = 41;
 			
-			posicionesEnemigas[1][0] = 30;
+			posicionesEnemigas[1][0] = 33;
 			posicionesEnemigas[1][1] = 31;
 			posicionesEnemigas[1][2] = 32;
 			unidadesMias = new int [] {0,1,2};
@@ -79,7 +79,7 @@ public class OpcionesPartida {
 			posicionesEnemigas[0][1] = 41;
 			posicionesEnemigas[0][2] = 41;
 			
-			posicionesEnemigas[1][0] = 30;
+			posicionesEnemigas[1][0] = 33;
 			posicionesEnemigas[1][1] = 31;
 			posicionesEnemigas[1][2] = 32;
 			unidadesMias = new int [] {0,1,2};

@@ -36,7 +36,7 @@ public abstract class testGame implements Screen {
 	public TiledMap map; 
 	protected IsoMap renderer;
 	
-	public Ball[] balls;
+	//public Ball[] balls;
 	public Ball[] ownBalls, enemyBalls;
 	
 	public Vector3 touchPos, last_touch_down = new Vector3();
@@ -47,8 +47,8 @@ public abstract class testGame implements Screen {
 	Box2DDebugRenderer debugRenderer;
 	private float elapsedSinceAnimation = 0;
 	
-	protected int[][] coords;
-	public Player ply;
+	protected int[][] coords, coordsCPU;
+	public Player ply, cpu;
 	
 	Stage stage;
 	public Controller controller;
@@ -166,9 +166,9 @@ public abstract class testGame implements Screen {
 		//camera.rotate(-0.25f, 0, 0, 1);
 		renderer.getBatch().begin();
 			renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(0));
-			renderer.customRender(lay1, coords, ply.balls);
+			renderer.customRender(lay1, coords, ply.balls, coordsCPU, cpu.balls);
 			renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(2));
-			balls[1].draw(renderer.getBatch());
+			//balls[1].draw(renderer.getBatch());
 			//player.setColor(0, 0, 1, 1);			
 			renderer.getBatch().setProjectionMatrix(camera.projection);
 			game.font.draw(renderer.getBatch(), "fps: " + Gdx.graphics.getFramesPerSecond(), 280 *camera.zoom, 260*camera.zoom);
@@ -184,6 +184,9 @@ public abstract class testGame implements Screen {
 	private void getRenderingCoords() {
 		for (int i = 0; i < ply.balls.size; i++){
 			CoordConverter.getCellCoords(ply.balls.get(i).getX()+ply.balls.get(i).getWidth()/2, ply.balls.get(i).getY(), coords, i);
+		}
+		for (int i = 0; i < cpu.balls.size; i++){
+			CoordConverter.getCellCoords(cpu.balls.get(i).getX()+cpu.balls.get(i).getWidth()/2, cpu.balls.get(i).getY(), coordsCPU, i);
 		}
 	}
 	
@@ -209,7 +212,8 @@ public abstract class testGame implements Screen {
     	game.batch.dispose();
     	map.dispose();
     	renderer.dispose();
-    	balls[1].getTexture().dispose();//dispose all textures
+    	
+    	//balls[1].getTexture().dispose();//dispose all textures
     	controller.Dispose();
     	stage.dispose();
     	world.dispose();
