@@ -18,7 +18,7 @@ public class CoordConverter {
 		CoordConverter.mapH = mapH-1;
 	}
 
-	public static void PlacePlayer(short tileX, short tileY, Ball player){
+	public static void PlacePlayer(int tileX, int tileY, Ball player){
 		float x = fixedX + ((tileX - tileY) * tileW / 2), y = fixedY - ((tileX + tileY) * tileH / 2);
 		player.setPosition(x, y);
 	}

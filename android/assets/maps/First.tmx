@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="isometric" renderorder="right-down" width="35" height="35" tilewidth="64" tileheight="32" nextobjectid="15">
+<map version="1.0" orientation="isometric" renderorder="right-down" width="65" height="65" tilewidth="64" tileheight="32" nextobjectid="15">
  <tileset firstgid="1" name="Sec" tilewidth="64" tileheight="64">
   <image source="iso-64x64-outside.png" width="640" height="1024"/>
   <tile id="0">
@@ -206,22 +206,22 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Capa de Patrones 1" width="35" height="35" opacity="0.99">
+ <layer name="Capa de Patrones 1" width="65" height="65" opacity="0.99">
   <data encoding="base64" compression="zlib">
-   eJztzjENACAMALCZRQEB7DMJPDtGevTviIgBnzhpF3u9rDSLubi4uLi4uLi4uLi4dLhABxdGnAYW
+   eJzt0EENACEMALCZRAIKCId9MLGwcH3UQFtENAAAACBFL8SBAwcOKh6s40tW/WAeI5kDBw4cOHDgwIEDBw4cOHDgwIEDBw4cOHDg4K2DWxw4cODg9gEAAAD8wQbaHupb
   </data>
  </layer>
- <layer name="Capa de patrones 2" width="35" height="35">
+ <layer name="Capa de patrones 2" width="65" height="65">
   <properties>
    <property name="blocked" value=""/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztld0KwjAMRvcm/usDuAp7qql4N/Ru7+0XdBBKSxtoLNQcOLCFQr5lhHadYbTDAM/wAvuv/LmP1F3kjPPO0/sjM4sr8UEJbpnnBtUUH3Kz2FzC2FzClJzL5CnN0upciBecPWvP5QSPcC/IorVHB7iDG0EWrbls4RquBFlsj8L8wx5xau8Rp6W5TML6L7I8M+slssT+0dJzzqyXyJKaC/Xkd0uNLAvUk98tvF46S2qPqCe/WzSz3OFV2VGQ2zBCvAF1SzUh
+   eJzt11sKwjAQheHsxLsuwFboqrzgW9G37tsZsBAKSaM2ccT/gwM2FMIMo4nOAQAAAAAAAMB3NJK95CCpnvE/V4H1OvBOPXhfn6/FqnlPXWCPc4E9PtEU2MN6D5gD5kAxB8yBmnIO2kF61nvAHEz/e3CXdINY70GuOdhJtpK1s9+DXOfCRrKSLJz9HuSag6VkLpk5+z3gXOBcUJwLzIHi/wJzoEJz0L64HvPrPbglrsdY70Hou9DX2iWux1jvwdgcaK3+3f+fetDTWv27v7+eynoPxs4FrdW/+/vrqaz34CI5Zc6xWDUAAAAAAAAAfA/rGTUh
   </data>
  </layer>
- <layer name="Capa de patrones 3" width="35" height="35">
+ <layer name="Capa de patrones 3" width="65" height="65">
   <data encoding="base64" compression="zlib">
-   eJztzjEBAAAEADDFpFVUA4+DY0uwCAAAJnUdAGAtrwPAew1ncQDh
+   eJztzkERAAAEADDFpFVUCOc8bAkWAQAAAAAAAAB8UdcBAABYltcBAAAAAAAYaEf1AOE=
   </data>
  </layer>
 </map>

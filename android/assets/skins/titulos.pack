@@ -1,0 +1,26 @@
+
+titulos.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+towerconquest
+  rotate: false
+  xy: 0, 64
+  size: 700, 278
+  orig: 700, 278
+  offset: 0, 0
+  index: -1
+ABOUT_TC
+  rotate: false
+  xy: 0, 0
+  size: 181, 64
+  orig: 181, 64
+  offset: 0, 0
+  index: -1
+PLAY_TC
+  rotate: false
+  xy: 700, 278
+  size: 181, 64
+  orig: 181, 64
+  offset: 0, 0
+  index: -1

@@ -2,6 +2,7 @@ package noxer.games.ballons.entities;
 
 
 import noxer.games.ballons.maths.CoordConverter;
+import noxer.games.ballons.screens.Nivel;
 import noxer.games.ballons.screens.testGame;
 
 import com.badlogic.gdx.Gdx;
@@ -29,7 +30,7 @@ public abstract class Ball extends Sprite {
 	public TiledMapTileLayer collisionLayer;
 	final short PLAYER1 = 0x1;    // 0001
     final short PLAYER2 = 0x1 << 1; // 0010 or 0x2 in hex
-    private testGame game;
+    private Nivel game;
     private boolean checkCollision;
 	
 	public Ball(Sprite sprite, TiledMapTileLayer collisionLayer, World world, NinePatchDrawable patchBack, NinePatchDrawable patchHP,
@@ -61,7 +62,7 @@ public abstract class Ball extends Sprite {
 		movingWithPad = false;
 	}
 	
-	public void setGame(testGame game){
+	public void setGame(Nivel game){
 		this.game = game;
 	}
 

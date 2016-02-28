@@ -9,6 +9,8 @@ public class OpcionesPartida {
 	public int numBolasMias, numBolasEnemigo, numEnemigos, xTorreMia, yTorreMia, xTorreEn, yTorreEn;
 	public TiledMap map;
 	public int posicionesMias [][], posicionesEnemigas[][];
+	public int unidadesMias[]; //0 ballbasic, 1 ballDefender, 2 ballStrong
+	public int unidadesEnemigo[]; //0 ballbasic, 1 ballDefender, 2 ballStrong
 	public OpcionesPartida(int nivel) {
 		switch (nivel) {
 		case 0:
@@ -17,22 +19,23 @@ public class OpcionesPartida {
 			numBolasEnemigo = 3;
 			posicionesMias = new int[2][3];
 			posicionesEnemigas = new int[2][3];
-			posicionesMias[0][0] = 14;
-			posicionesMias[0][1] = 15;
-			posicionesMias[0][2] = 16;
+			posicionesMias[0][0] = 29;
+			posicionesMias[0][1] = 30;
+			posicionesMias[0][2] = 31;
 			
-			posicionesMias[1][0] = 26;
-			posicionesMias[1][1] = 26;
-			posicionesMias[1][2] = 26;
+			posicionesMias[1][0] = 41;
+			posicionesMias[1][1] = 41;
+			posicionesMias[1][2] = 41;
 			
-			posicionesEnemigas[0][0] = 26;
-			posicionesEnemigas[0][1] = 26;
-			posicionesEnemigas[0][2] = 26;
+			posicionesEnemigas[0][0] = 41;
+			posicionesEnemigas[0][1] = 41;
+			posicionesEnemigas[0][2] = 41;
 			
-			posicionesEnemigas[1][0] = 15;
-			posicionesEnemigas[1][1] = 16;
-			posicionesEnemigas[1][2] = 17;
-			
+			posicionesEnemigas[1][0] = 30;
+			posicionesEnemigas[1][1] = 31;
+			posicionesEnemigas[1][2] = 32;
+			unidadesMias = new int [] {0,1,2};
+			unidadesEnemigo = new int [] {0,1,0};
 			break;
 		case 1:
 			map = new TmxMapLoader().load("maps/First.tmx");
@@ -40,21 +43,23 @@ public class OpcionesPartida {
 			numBolasEnemigo = 3;
 			posicionesMias = new int[2][3];
 			posicionesEnemigas = new int[2][3];
-			posicionesMias[0][0] = 14;
-			posicionesMias[0][1] = 15;
-			posicionesMias[0][2] = 16;
+			posicionesMias[0][0] = 29;
+			posicionesMias[0][1] = 30;
+			posicionesMias[0][2] = 31;
 			
-			posicionesMias[1][0] = 26;
-			posicionesMias[1][1] = 26;
-			posicionesMias[1][2] = 26;
+			posicionesMias[1][0] = 41;
+			posicionesMias[1][1] = 41;
+			posicionesMias[1][2] = 41;
 			
-			posicionesEnemigas[0][0] = 26;
-			posicionesEnemigas[0][1] = 26;
-			posicionesEnemigas[0][2] = 26;
+			posicionesEnemigas[0][0] = 41;
+			posicionesEnemigas[0][1] = 41;
+			posicionesEnemigas[0][2] = 41;
 			
-			posicionesEnemigas[1][0] = 15;
-			posicionesEnemigas[1][1] = 16;
-			posicionesEnemigas[1][2] = 17;
+			posicionesEnemigas[1][0] = 30;
+			posicionesEnemigas[1][1] = 31;
+			posicionesEnemigas[1][2] = 32;
+			unidadesMias = new int [] {0,1,2};
+			unidadesEnemigo = new int [] {0,1,2};
 			break;
 		default:
 			map = new TmxMapLoader().load("maps/First.tmx");
@@ -62,21 +67,23 @@ public class OpcionesPartida {
 			numBolasEnemigo = 3;
 			posicionesMias = new int[2][3];
 			posicionesEnemigas = new int[2][3];
-			posicionesMias[0][0] = 14;
-			posicionesMias[0][1] = 15;
-			posicionesMias[0][2] = 16;
+			posicionesMias[0][0] = 29;
+			posicionesMias[0][1] = 30;
+			posicionesMias[0][2] = 31;
 			
-			posicionesMias[1][0] = 26;
-			posicionesMias[1][1] = 26;
-			posicionesMias[1][2] = 26;
+			posicionesMias[1][0] = 41;
+			posicionesMias[1][1] = 41;
+			posicionesMias[1][2] = 41;
 			
-			posicionesEnemigas[0][0] = 26;
-			posicionesEnemigas[0][1] = 26;
-			posicionesEnemigas[0][2] = 26;
+			posicionesEnemigas[0][0] = 41;
+			posicionesEnemigas[0][1] = 41;
+			posicionesEnemigas[0][2] = 41;
 			
-			posicionesEnemigas[1][0] = 15;
-			posicionesEnemigas[1][1] = 16;
-			posicionesEnemigas[1][2] = 17;
+			posicionesEnemigas[1][0] = 30;
+			posicionesEnemigas[1][1] = 31;
+			posicionesEnemigas[1][2] = 32;
+			unidadesMias = new int [] {0,1,2};
+			unidadesEnemigo = new int [] {0,1,2};
 			break;
 		}
 	}

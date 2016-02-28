@@ -56,7 +56,7 @@ public class Nivel extends testGame{
 		super.setupActors();
 		
 		final Pursue<Vector2> seekSB = new Pursue<Vector2>(((BallBasicAI)balls[1]), 
-        		((BallBasicAI)balls[0]));
+        		((BallBasicAI)ownBalls[0]));
         ((BallBasicAI)balls[1].body.getUserData()).setBehavior(seekSB);
         balls[1].usingAI = true;
         
@@ -138,34 +138,49 @@ public class Nivel extends testGame{
 		enemyBalls = new Ball[ops.numBolasEnemigo];
 		
 		for (int i = 0; i < ownBalls.length; i++){
-			//ownBalls[i] = 
+			switch (ops.unidadesMias[i]) { //segun el tipo de unidad k sea la 0, creamos 1 tipo o otro, y asi
+			case 0:
+				ownBalls[i] = new BallBasicAI(entities.createSprite("ballBasicRed"), 
+						lay1, world, loadingBarBackground, loadingBar, regionsRed);
+				break;
+				//PONER OTROS CASOS
+			default:
+				ownBalls[i] = new BallBasicAI(entities.createSprite("ballBasicRed"), 
+						lay1, world, loadingBarBackground, loadingBar, regionsRed);
+				break;
+			}
+			CoordConverter.PlacePlayer(ops.posicionesMias[0][i], ops.posicionesMias[1][i], ownBalls[i]);
+			ownBalls[i].initBody(world, 0);
+			ownBalls[i].setGame(this);
 		}
 		
 		
-		short casX = 12, casY = 8;
+		/*short casX = 12, casY = 8;
         balls = new Ball[3];
 		balls[0] = new BallBasicAI(entities.createSprite("ballBasicRed"), lay1, world, loadingBarBackground, loadingBar,
 				regionsRed);
-		CoordConverter.PlacePlayer(casX, casY, balls[0]);
-		casX = 7;
-		casY = 17;
+		CoordConverter.PlacePlayer(casX, casY, balls[0]);*/
+		balls = new Ball[2];
+		short casX = 22;
+		short casY = 32;
 		balls[1] = new BallBasicAI(entities.createSprite("ballBasicBlue"), lay1, world, loadingBarBackground, loadingBar,
 				regionsBlue);
 		CoordConverter.PlacePlayer(casX, casY, balls[1]);
+		balls[1].initBody(world, 1);
 		
-		casX = 14;
+		/*casX = 14;
 		casY = 12;
 		balls[2] = new BallBasicAI(entities.createSprite("ballBasicRed"), lay1, world, loadingBarBackground, loadingBar,
 				regionsRed);
-		CoordConverter.PlacePlayer(casX, casY, balls[2]);
+		CoordConverter.PlacePlayer(casX, casY, balls[2]);*/
 		
 		//setting up Players
 		//Start player1
-		Ball[] a = new Ball[2];
+		/*Ball[] a = new Ball[2];
 		a[0] = balls[0];
-		a[1] = balls[2];
-		ply = new Player(a);
-		initBodys(ply.balls, 5);
+		a[1] = balls[2];*/
+		ply = new Player(ownBalls);
+		//initBodys(ply.balls, 5);
 	}
 
 

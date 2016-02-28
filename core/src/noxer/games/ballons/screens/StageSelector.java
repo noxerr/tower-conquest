@@ -1,5 +1,7 @@
 package noxer.games.ballons.screens;
 
+import noxer.games.ballons.subclasses.ImageButtonId;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,7 +25,6 @@ public class StageSelector implements Screen {
 	private TextureAtlas atlasStage;
 	private Skin skinStage;
 	private ScrollPane scrollPane;
-	private static int nvl;
 	
 	public StageSelector(MainMenuScreen game) {
 		this.game = game;
@@ -60,22 +61,22 @@ public class StageSelector implements Screen {
 		scrollPane.setBounds(100, 0, 600, 400);
 		table.addActor(scrollPane);
 		
-		stages = new ImageButton[4];
-		stages[0] = new ImageButton(skinStage, "hill");
-		stages[1] = new ImageButton(skinStage, "iceberg");
-		stages[2] = new ImageButton(skinStage, "volcano");
-		stages[3] = new ImageButton(skinStage, "field");
-		for (int i = 0; i < stages.length; i++){
+		stages = new ImageButtonId[4];
+		stages[0] = new ImageButtonId(skinStage, "hill", 0, game.game);
+		stages[1] = new ImageButtonId(skinStage, "iceberg", 1, game.game);
+		stages[2] = new ImageButtonId(skinStage, "volcano", 2, game.game);
+		stages[3] = new ImageButtonId(skinStage, "field", 3, game.game);
+		/*for (int i = 0; i < stages.length; i++){
 			stages[i].padRight(15);
-			nvl = i;
 			stages[i].addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.game.setScreen(new Nivel(game.game, nvl));//TODO GO BACK
+				System.out.println("Nivel: " + 0);
+				game.game.setScreen(new Nivel(game.game, ((ImageButtonId)event.getTarget()).id));//TODO GO BACK
 			}
 			});
 			//stages[i].getColor().mul(1, 1, 1, 0.65f);
-		}
+		}*/
 		container.add(stages);
 		
 //		table.add(backArrow).align(Align.topLeft).pad(10);

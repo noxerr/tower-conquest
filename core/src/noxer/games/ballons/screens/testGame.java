@@ -88,15 +88,15 @@ public abstract class testGame implements Screen {
 		controller.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				touchingPad = true;
-				((Ball)balls[2].body.getUserData()).movingWithPad = true;
+				((Ball)ownBalls[2].body.getUserData()).movingWithPad = true;
 				//TODO WITH THE SELECTED BALL
 		        return true;
 		    }
 
 		    public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 		    	touchingPad = false;
-		    	((Ball)balls[2].body.getUserData()).movingWithPad = false;
-		    	((Ball)balls[2].body.getUserData()).stopMoving = true;
+		    	((Ball)ownBalls[2].body.getUserData()).movingWithPad = false;
+		    	((Ball)ownBalls[2].body.getUserData()).stopMoving = true;
 		    }
 		});
 		
@@ -126,11 +126,11 @@ public abstract class testGame implements Screen {
 
 
 	protected void initBodys(Array<Ball> player1, int level) {
-		for (int i = 0; i < player1.size; i++){
+		/*for (int i = 0; i < player1.size; i++){
 	        player1.get(i).initBody(world, 0);
 	        player1.get(i).setGame(this);
 		}	
-		balls[1].initBody(world, 1);
+		balls[1].initBody(world, 1);*/
 	}
 
 
@@ -158,7 +158,7 @@ public abstract class testGame implements Screen {
         }
 		
 		
-		if (touchingPad) ((Ball)balls[2].body.getUserData()).stopMoving = false; //TODO WITH SELECTED BALL
+		if (touchingPad) ((Ball)ownBalls[2].body.getUserData()).stopMoving = false; //TODO WITH SELECTED BALL
 		//game.batch.enableBlending();
 		camera.update();
 		renderer.setView(camera);
@@ -183,7 +183,7 @@ public abstract class testGame implements Screen {
 	//ACTUALIZA LAS COORDENADAS PARA SABER DONDE PINTAR
 	private void getRenderingCoords() {
 		for (int i = 0; i < ply.balls.size; i++){
-			CoordConverter.getCellCoords(ply.balls.get(i).getX()+balls[0].getWidth()/2, ply.balls.get(i).getY(), coords, i);
+			CoordConverter.getCellCoords(ply.balls.get(i).getX()+ply.balls.get(i).getWidth()/2, ply.balls.get(i).getY(), coords, i);
 		}
 	}
 	
@@ -209,7 +209,7 @@ public abstract class testGame implements Screen {
     	game.batch.dispose();
     	map.dispose();
     	renderer.dispose();
-    	balls[0].getTexture().dispose();//dispose all textures
+    	balls[1].getTexture().dispose();//dispose all textures
     	controller.Dispose();
     	stage.dispose();
     	world.dispose();
