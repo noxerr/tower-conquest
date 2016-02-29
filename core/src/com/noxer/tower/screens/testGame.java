@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.noxer.tower.TowerConquest;
+import com.noxer.tower.data.OpcionesPartida;
 import com.noxer.tower.data.Player;
 import com.noxer.tower.entities.Ball;
 import com.noxer.tower.listeners.ContListener;
@@ -49,6 +50,7 @@ public abstract class testGame implements Screen {
 	
 	protected int[][] coords, coordsCPU;
 	public Player ply, cpu;
+	public int indexBolaControlada;
 	
 	Stage stage;
 	public Controller controller;
@@ -58,11 +60,13 @@ public abstract class testGame implements Screen {
 	private Table container, table;
 	private ScrollPane scrollPane;
 	private Skin skin;
+	protected OpcionesPartida ops;
+	private boolean firstTime, dead;
 	
 	public testGame(final TowerConquest game) {
 		this.game = game;
 		float w = Gdx.graphics.getWidth();
-		
+		dead = false;
 		touchPos = new Vector3();
 		world = new World(new Vector2(0, 0),true);
 		world.setContactListener(new ContListener(this));
@@ -70,7 +74,8 @@ public abstract class testGame implements Screen {
 	    camera = new OrthographicCamera();
 	    camera.setToOrtho(false,w+w,0);
         debugRenderer = new Box2DDebugRenderer();
-
+        indexBolaControlada = -1;
+        firstTime = true;
         //AI PART//or evade        
         /*final Flee<Vector2> reachB = new Flee<Vector2>(((BallBasicAI)balls[0].body.getUserData()), 
         		((BallBasicAI)balls[1].body.getUserData()));
@@ -88,40 +93,46 @@ public abstract class testGame implements Screen {
 		controller.addListener(new InputListener(){
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				touchingPad = true;
-				((Ball)ownBalls[2].body.getUserData()).movingWithPad = true;
+				if (indexBolaControlada >= 0)
+					((Ball)ownBalls[indexBolaControlada].body.getUserData()).movingWithPad = true;
 				//TODO WITH THE SELECTED BALL
 		        return true;
 		    }
 
 		    public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 		    	touchingPad = false;
-		    	((Ball)ownBalls[2].body.getUserData()).movingWithPad = false;
-		    	((Ball)ownBalls[2].body.getUserData()).stopMoving = true;
+		    	if (indexBolaControlada >= 0){
+			    	((Ball)ownBalls[indexBolaControlada].body.getUserData()).movingWithPad = false;
+			    	((Ball)ownBalls[indexBolaControlada].body.getUserData()).stopMoving = true;
+		    	}
 		    }
 		});
 		
 		stage.addActor(controller);
-		skin = new Skin(gameUI);
+		skin = new Skin(Gdx.files.internal("skins/gameUI.json"), gameUI);
 		container = new Table(skin);
 		table = new Table();
 		stage.addActor(container);
 		
 		scrollPane = new ScrollPane(table);
 		scrollPane.setFlickScroll(true);
+		
+		/*bs.up.setMinWidth(60);
+		bs.up.setMinHeight(60);*/
 		ImageUI[] image = new ImageUI[12];
-		for (int i = 0; i < 12; i++){
+		for (int i = 0; i < 6; i++){
 			if (i < ply.balls.size) 
-				image[i] = new ImageUI(gameUI.findRegion("dissabledbutton"), entities.findRegion("ballBasicRed"), true, i);
-			else image[i] = new ImageUI(gameUI.findRegion("dissabledbutton"), entities.findRegion("ballBasicRed"), false, i);
+				image[i] = new ImageUI(skin, "bola", entities.findRegion("ballBasicRed"), true, i, this);
+			else image[i] = new ImageUI(skin, "solo", entities.findRegion("ballBasicRed"), false, i, this);
 //			table.add(image[i]).minSize(Gdx.graphics.getWidth()/16, Gdx.graphics.getWidth()/16).spaceRight(20);
 			table.add(image[i]).minSize(60, 60).spaceRight(20);
-		}	
+		}
+		//table.add(image);
 //		container.setBounds(Gdx.graphics.getWidth()/6.5f, Gdx.graphics.getWidth()/32, Gdx.graphics.getWidth() - 200, Gdx.graphics.getWidth()/16);//was 150, 25, 600, 
 		container.setBounds(150, 10, 800 - 200, 64);
 		container.bottom();
 		container.add(scrollPane).padLeft(10).padRight(10);
 		container.getColor().mul(1, 1, 1, 0.65f);
-		
 	}
 
 
@@ -137,51 +148,64 @@ public abstract class testGame implements Screen {
 	@Override
 	public void render(float delta) {
 		delta = Math.min(0.06f, delta);
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		getRenderingCoords();
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		world.step(1f/30f, 6, 2);
-		for (Body body : bodiesToDestroy){
-			//body.getBody().destroyFixture(body);
-			body.setActive(false);
-			world.destroyBody(body);
-			bodiesToDestroy.removeValue(body, true);
+		if (!dead){
+			Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			getRenderingCoords();
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+			world.step(1f/30f, 6, 2);
+			for (Body body : bodiesToDestroy){
+				//body.getBody().destroyFixture(body);
+				body.setActive(false);
+				//world.destroyBody(body); //SI NO LA DESTRUYO ME AHORRO PROBLEMAS
+				bodiesToDestroy.removeValue(body, true);
+			}
+			
+			//ANIMACIONES
+			elapsedSinceAnimation += Gdx.graphics.getDeltaTime();
+	        if(elapsedSinceAnimation > 0.8f){
+	            updateWaterAnimations();
+	            elapsedSinceAnimation = 0.0f;
+	        }
+			
+			
+			if (touchingPad && indexBolaControlada >= 0) ((Ball)ownBalls[indexBolaControlada].body.getUserData()).stopMoving = false; //TODO WITH SELECTED BALL
+			//game.batch.enableBlending();
+			camera.update();
+			renderer.setView(camera);
+			//renderer.render();
+			//camera.rotate(-0.25f, 0, 0, 1);
+			renderer.getBatch().begin();
+				renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(0));
+				renderer.customRender(lay1, coords, ply.balls, coordsCPU, cpu.balls);
+				renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(2));
+				ply.tower.patchHP.draw(renderer.getBatch(), ply.tower.posX - ply.tower.width/2, 
+						ply.tower.posY + ply.tower.height*4/5, ply.tower.width, 16);
+				cpu.tower.patchHP.draw(renderer.getBatch(), cpu.tower.posX - cpu.tower.width/2, 
+						cpu.tower.posY + cpu.tower.height*4/5, cpu.tower.width, 16);
+				//balls[1].draw(renderer.getBatch());
+				//player.setColor(0, 0, 1, 1);			
+				renderer.getBatch().setProjectionMatrix(camera.projection);
+				game.font.draw(renderer.getBatch(), "fps: " + Gdx.graphics.getFramesPerSecond(), 280 *camera.zoom, 260*camera.zoom);
+			renderer.getBatch().end();
+			debugRenderer.render(world, camera.combined);
+			//container.debugTable();
+			stage.getViewport().apply();
+			stage.act(delta);
+			stage.draw();
 		}
-		
-		//ANIMACIONES
-		elapsedSinceAnimation += Gdx.graphics.getDeltaTime();
-        if(elapsedSinceAnimation > 0.8f){
-            updateWaterAnimations();
-            elapsedSinceAnimation = 0.0f;
-        }
-		
-		
-		if (touchingPad) ((Ball)ownBalls[2].body.getUserData()).stopMoving = false; //TODO WITH SELECTED BALL
-		//game.batch.enableBlending();
-		camera.update();
-		renderer.setView(camera);
-		//renderer.render();
-		//camera.rotate(-0.25f, 0, 0, 1);
-		renderer.getBatch().begin();
-			renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(0));
-			renderer.customRender(lay1, coords, ply.balls, coordsCPU, cpu.balls);
-			renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(2));
-			ply.tower.patchHP.draw(renderer.getBatch(), ply.tower.posX - ply.tower.width/2, 
-					ply.tower.posY + ply.tower.height*4/5, ply.tower.width, 16);
-			cpu.tower.patchHP.draw(renderer.getBatch(), cpu.tower.posX - cpu.tower.width/2, 
-					cpu.tower.posY + cpu.tower.height*4/5, cpu.tower.width, 16);
-			//balls[1].draw(renderer.getBatch());
-			//player.setColor(0, 0, 1, 1);			
-			renderer.getBatch().setProjectionMatrix(camera.projection);
-			game.font.draw(renderer.getBatch(), "fps: " + Gdx.graphics.getFramesPerSecond(), 280 *camera.zoom, 260*camera.zoom);
-		renderer.getBatch().end();
-		debugRenderer.render(world, camera.combined);
-		//container.debugTable();
-		stage.getViewport().apply();
-		stage.draw();
-		stage.act(delta);
+	}
+	
+	
+	private void dead(){
+		dead = true;
+		for (Ball b : ownBalls){
+			if (b.alive) dead = false;
+		}
+		if (dead)
+			for (Ball b : enemyBalls)
+				if (b.alive) dead = false;
 	}
 	
 	//ACTUALIZA LAS COORDENADAS PARA SABER DONDE PINTAR
@@ -204,6 +228,10 @@ public abstract class testGame implements Screen {
 		//stage.getCamera().update();
 		camera.viewportHeight = height;
 		camera.viewportWidth = width;
+		if (firstTime){
+			firstTime = false;
+			camera.position.set(ply.tower.posX+80, ply.tower.posY+50, 0);//= new Vector3(ply.tower.posX, ply.tower.posY, 0);
+		}
 	}
 
 	public void pause () { 

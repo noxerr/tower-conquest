@@ -84,7 +84,8 @@ public class InpListener extends InputAdapter{
 		if (!game.touchingPad && !dragged){
 			game.touchPos.set(screenX, screenY, 0); //touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			game.camera.unproject(game.touchPos);
-			game.ownBalls[0].setAimCoords(game.touchPos.x, game.touchPos.y);
+			if (game.indexBolaControlada >= 0)
+				game.ownBalls[game.indexBolaControlada].setAimCoords(game.touchPos.x, game.touchPos.y);
 		}
 		/*USE IT TO TARGET ENEMYS: WHEN TOUCHING JOYSTIC AI = FALSE, IF STOP AI = FALSE; IF COLLISION AI = FALSE, IF CLICK OUTSIDE AI FALSE 
 		 * final Arrive<Vector2> seek = new Arrive<Vector2>(((BallBasicAI)balls[0].body.getUserData()), 

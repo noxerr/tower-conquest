@@ -1,0 +1,8 @@
+{
+	"com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle":  {
+		"bola": { "imageUp": "dissabledbutton", "imageDown": "dissabledbutton", 
+			 "pressedOffsetX": 1, "pressedOffsetY": -1 },
+		 "solo": { "imageUp": "dissabledbutton", "imageDown": "dissabledbutton", 
+			 "pressedOffsetX": 1, "pressedOffsetY": -1 },
+	}, 
+}

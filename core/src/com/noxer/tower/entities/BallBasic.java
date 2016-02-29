@@ -15,7 +15,7 @@ public class BallBasic extends Ball{
 	public BallBasic(Sprite sprite, TiledMapTileLayer collisionLayer, World world, NinePatchDrawable patchBack, NinePatchDrawable patchHP,
 			TextureRegion[] explosion) {
 		super(sprite, collisionLayer, world, patchBack, patchHP, explosion);
-		speed = 50;
+		speed = 40;
 		life = 100;
 		maxLife = 100;
 		damage = 25;
@@ -24,6 +24,7 @@ public class BallBasic extends Ball{
 		progress = 1f;
 		inertiaInit = 0.15f;
 		inertiaNow = inertiaInit;
+		inertiaMax = 2.8f;
 	}
 	
 	

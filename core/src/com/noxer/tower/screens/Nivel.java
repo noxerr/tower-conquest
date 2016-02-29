@@ -33,7 +33,6 @@ public class Nivel extends testGame{
 	private NinePatchDrawable loadingBarBackground, loadingBar, ldBackBlue, ldBarBlue;
 	ArrayList<TiledMapTileLayer.Cell> towerCellsInScene;
     Map<String,TiledMapTile> towerTiles;
-    private OpcionesPartida ops;
     
 	public Nivel(TowerConquest game, int nivel) {
 		super(game);
@@ -43,7 +42,6 @@ public class Nivel extends testGame{
 		
 		gameUI = new TextureAtlas(Gdx.files.internal("skins/gameUI.pack"));
 		entities = new TextureAtlas(Gdx.files.internal("skins/entities.pack"));
-		
 		//setting up Converter Class
 		lay1 = (TiledMapTileLayer) map.getLayers().get(1);
 		float mapW = lay1.getWidth(), mapH = lay1.getHeight(), 
@@ -55,13 +53,27 @@ public class Nivel extends testGame{
 		coords = new int[2][ply.balls.size];
 		coordsCPU = new int[2][cpu.balls.size];
 		
-		super.setupActors();
 		
 		final Pursue<Vector2> seekSB = new Pursue<Vector2>(((BallBasicAI)enemyBalls[0]), 
         		((BallBasicAI)ownBalls[0]));
         ((BallBasicAI)enemyBalls[0].body.getUserData()).setBehavior(seekSB);
         enemyBalls[0].usingAI = true;
         
+        final Pursue<Vector2> seekSB2 = new Pursue<Vector2>(((BallBasicAI)enemyBalls[1]), 
+        		((BallBasicAI)ownBalls[1]));
+        ((BallBasicAI)enemyBalls[1].body.getUserData()).setBehavior(seekSB2);
+        enemyBalls[1].usingAI = true;
+        enemyBalls[1].maxLife = 70;
+        enemyBalls[1].life = 70;
+        
+        final Pursue<Vector2> seekSB3 = new Pursue<Vector2>(((BallBasicAI)enemyBalls[2]), 
+        		((BallBasicAI)ownBalls[2]));
+        ((BallBasicAI)enemyBalls[2].body.getUserData()).setBehavior(seekSB3);
+        enemyBalls[2].usingAI = true;
+        enemyBalls[2].maxLife = 70;
+        enemyBalls[2].life = 70;
+        
+        super.setupActors();
         
       //setting up processors
   		InputMultiplexer inp = new InputMultiplexer();
