@@ -61,12 +61,13 @@ public abstract class testGame implements Screen {
 	private ScrollPane scrollPane;
 	private Skin skin;
 	protected OpcionesPartida ops;
-	private boolean firstTime, dead;
+	private boolean firstTime, deadOwn, deadEnemy;
 	
 	public testGame(final TowerConquest game) {
 		this.game = game;
 		float w = Gdx.graphics.getWidth();
-		dead = false;
+		deadOwn = false;
+		deadEnemy = false;
 		touchPos = new Vector3();
 		world = new World(new Vector2(0, 0),true);
 		world.setContactListener(new ContListener(this));
@@ -148,7 +149,9 @@ public abstract class testGame implements Screen {
 	@Override
 	public void render(float delta) {
 		delta = Math.min(0.06f, delta);
-		if (!dead){
+		
+		if (!deadOwn && !deadEnemy){
+			dead();
 			Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			getRenderingCoords();
 			Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -195,17 +198,22 @@ public abstract class testGame implements Screen {
 			stage.act(delta);
 			stage.draw();
 		}
+		else{
+			game.setScreen(new FinishScreen(game, deadOwn));
+			dispose();
+		}
 	}
 	
 	
 	private void dead(){
-		dead = true;
+		deadOwn = true;
+		deadEnemy = true;
 		for (Ball b : ownBalls){
-			if (b.alive) dead = false;
+			if (b.alive) deadOwn = false;
 		}
-		if (dead)
+		if (!deadOwn)
 			for (Ball b : enemyBalls)
-				if (b.alive) dead = false;
+				if (b.alive) deadEnemy = false;
 	}
 	
 	//ACTUALIZA LAS COORDENADAS PARA SABER DONDE PINTAR
@@ -241,17 +249,17 @@ public abstract class testGame implements Screen {
     }
 
     public void dispose () { 
-    	game.batch.dispose();
+    	//game.batch.dispose();
     	map.dispose();
-    	renderer.dispose();
+    	//renderer.dispose();
     	
     	//balls[1].getTexture().dispose();//dispose all textures
     	controller.Dispose();
-    	stage.dispose();
-    	world.dispose();
+    	//stage.dispose();
+    	//world.dispose();
     	gameUI.dispose();
     	entities.dispose();
-    	debugRenderer.dispose();
+    	//debugRenderer.dispose();
     }
 
 	@Override

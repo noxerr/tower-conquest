@@ -5,21 +5,28 @@ filter: Nearest,Nearest
 repeat: none
 towerconquest
   rotate: false
-  xy: 0, 64
+  xy: 0, 134
   size: 700, 278
   orig: 700, 278
   offset: 0, 0
   index: -1
+BOTO-01
+  rotate: false
+  xy: 0, 64
+  size: 185, 70
+  orig: 185, 70
+  offset: 0, 0
+  index: -1
 ABOUT_TC
   rotate: false
-  xy: 0, 0
+  xy: 700, 348
   size: 181, 64
   orig: 181, 64
   offset: 0, 0
   index: -1
 PLAY_TC
   rotate: false
-  xy: 700, 278
+  xy: 0, 0
   size: 181, 64
   orig: 181, 64
   offset: 0, 0

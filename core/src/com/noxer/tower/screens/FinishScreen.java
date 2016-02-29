@@ -1,8 +1,6 @@
 package com.noxer.tower.screens;
 
 
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,15 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.noxer.tower.TowerConquest;
 
-public class MainMenuScreen implements Screen {
+public class FinishScreen implements Screen {
 
 	final TowerConquest game;
-	final MainMenuScreen mmScreen;
+	final FinishScreen mmScreen;
 	private TextureAtlas atlas, titulos;
 	protected Skin skin, skinTitulos;
 	private Stage stage;
@@ -32,14 +31,16 @@ public class MainMenuScreen implements Screen {
 	//private Label heading;
 	private Image heading;
 	//private TextButton buttonPlay, buttonExit;
-	private ImageButton play, about;
+	private TextButton play;
 	protected Sprite background;
 	//private List<String> list;
 	//private ScrollPane scrollPane;
+	private boolean ganado;
 	
-    public MainMenuScreen(final TowerConquest gam) {
+    public FinishScreen(final TowerConquest gam, boolean ganado) {
         game = gam;
         mmScreen = this;
+        this.ganado = !ganado;
     }
     
 	@Override
@@ -50,63 +51,29 @@ public class MainMenuScreen implements Screen {
 		atlas = new TextureAtlas("skins/userInterface.pack");
 		titulos = new TextureAtlas("skins/titulos.pack");
 		skin = new Skin(Gdx.files.internal("skins/userInterface.json"), atlas);
-		skinTitulos = new Skin(titulos);
+		skinTitulos = new Skin(Gdx.files.internal("skins/titulos.json"), titulos);
 		table = new Table(skin);
 		table.setBounds(0, 0, 800, 480);
 		
-		/*buttonPlay = new TextButton("PLAY", skin, "mainMenuBlack");
-		buttonPlay.pad(20);
-		buttonPlay.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				//game.setScreen(new testGame(game));
-	            //dispose();
-				game.setScreen(new StageSelector(mmScreen));
-			}
-		});
+		//play = new TextButton("PLAY", skinTitulos, "mainMenuBlack");
 		
-		buttonExit = new TextButton("SHOP", skin, "mainMenuBlack");
-		buttonExit.pad(20);
-		buttonExit.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				dispose();
-	            Gdx.app.exit();
-			}
-		});*/
+		if (ganado) 
+			play = new TextButton("You WON!\nClick to go Back", skinTitulos, "mainMenuBlack");
 		
-		ImageButtonStyle b = new ImageButtonStyle();
-		b.imageUp = skinTitulos.getDrawable("PLAY_TC");
-		//b.imageDown = skin2.getDrawable("options");
-		b.pressedOffsetX = 1;
-		b.pressedOffsetY = -1;
-		b.imageUp.setMinHeight(85);
-		b.imageUp.setMinWidth(115);
-		play = new ImageButton(b);
+		else 
+			play = new TextButton("You lost.\nClick to go Back", skinTitulos, "mainMenuBlack");
+		 
+		play.getStyle().font.setColor(0.7411f, 0.8f, 0.1137f, 1.0f);//fontColor.set(0.7411f, 0.8f, 0.1137f, 1.0f);//0.7411, "g": 0.8, "b": 0.1137
+		
 		play.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				//game.setScreen(new testGame(game));
 	            //dispose();
-				game.setScreen(new StageSelector(mmScreen));
+				game.setScreen(new MainMenuScreen(game));
 			}
 		});
 		
-		ImageButtonStyle bb = new ImageButtonStyle();
-		bb.imageUp = skinTitulos.getDrawable("ABOUT_TC");
-		//b.imageDown = skin2.getDrawable("options");
-		bb.pressedOffsetX = 1;
-		bb.pressedOffsetY = -1;
-		bb.imageUp.setMinHeight(85);
-		bb.imageUp.setMinWidth(115);
-		about = new ImageButton(bb);
-		about.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				dispose();
-	            Gdx.app.exit();
-			}
-		});
 		
 		//heading = new Label("Tower Conquest", skin, "default");
 		//heading.setFontScale(2);
@@ -121,8 +88,6 @@ public class MainMenuScreen implements Screen {
 		table.row();
 		table.add(play);
 		table.getCell(play).spaceBottom(15);
-		table.row();
-		table.add(about);
 		//table.debug();
 		//table.setOrigin(table.getWidth()/2, table.getHeight()/2);
 		table.setFillParent(true);
